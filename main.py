@@ -1,17 +1,15 @@
 from fastapi import FastAPI, HTTPException
-from typing import Optional
+from typing import Optional, List, Dict
+from pydantic import BaseModel
 app = FastAPI()
 
 
-# @app.get("/")
-# async def root():
-#     return {"message": "Hello World"}
-#
-#
-# @app.get("/hello/{name}")
-# async def say_hello(name: str):
-#     return {"message": f"Hello {name}"}
-#
+
+class Post(BaseModel):
+    id: int
+    title: str
+    body: str
+
 
 posts = [
     {'id': 1, 'title': 'news_1', 'body': 'text_1'},
@@ -20,23 +18,25 @@ posts = [
 ]
 
 @app.get("/items")
-async def items() -> list:
-    return posts
-
+async def items() -> List[Post]:
+    post_list = []
+    for post in posts:
+        post_list.append(Post(id=post['id'], title=post['title'], body=post['body']))
+    return post_list
 
 @app.get("/item/{id}")
-async def item(id: int) -> dict:
+async def item(id: int) -> Post:
     for i in posts:
         if i['id'] == id:
-            return i
+            return Post(**i)
     raise HTTPException(status_code=404, detail="post not found")
 
 @app.get("/search")
-async def search(post_id: Optional[int] = None) -> dict:
+async def search(post_id: Optional[int] = None) -> Dict[str, Optional[Post]]:
     if post_id:
         for i in posts:
             if i['id'] == post_id:
-                return i
+                return {"data": Post(**i)}
         raise HTTPException(status_code=404, detail="post not found")
     else:
-        return {"message": "haven`t post id"}
+        return {"data": None}
