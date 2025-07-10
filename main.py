@@ -45,16 +45,24 @@ async def add_item(post: PostCreate) -> Post:
     if not author:
         raise HTTPException(status_code=404, detail="user not found")
 
-    new_post_id = len(posts) + 1
+    new_post_id = max((p['id'] for p in posts), default=0) + 1
 
-    new_post = ({'id': new_post_id,
+    new_post = {'id': new_post_id,
         'title': post.title,
         'body': post.body,
-        'author': author})
+        'author': author}
+
     posts.append(new_post)
 
     return Post(**new_post)
 
+@app.delete("/items/delete/{id}")
+async def delete_item(id: int) -> Post:
+   for index, post in enumerate(posts):
+       if post['id'] == id:
+           deleted_post = posts.pop(index)
+           return Post(**deleted_post)
+   raise HTTPException(status_code=404, detail="item not found")
 
 @app.get("/item/{id}")
 async def item(id: int) -> Post:
