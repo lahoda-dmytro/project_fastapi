@@ -27,6 +27,7 @@ class PostCreate(PostBase):
 
 class Post(PostBase):
     id: int
+    author: User
 
     class Config:
         orm_mode = True

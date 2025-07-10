@@ -1,31 +1,12 @@
 from fastapi import FastAPI, HTTPException, Path, Query
 from typing import Optional, List, Dict, Annotated
-from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from models import base, User, Post
+from database import engine, session_local
+
 app = FastAPI()
 
-
-class User(BaseModel):
-    id: int
-    username: str
-    age: int
-
-
-class Post(BaseModel):
-    id: int
-    title: str
-    body: str
-    author: User
-
-
-class PostCreate(BaseModel):
-    title: str
-    body: str
-    author_id: int
-
-
-class UserCreate(BaseModel):
-    username: Annotated[str, Field(..., title="user`s name")]
-    age: Annotated[int, Field(..., title="user`s age")]
 
 
 users = [
