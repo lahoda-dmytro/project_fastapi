@@ -1,6 +1,6 @@
-from fastapi import FastAPI, HTTPException
-from typing import Optional, List, Dict
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Path, Query
+from typing import Optional, List, Dict, Annotated
+from pydantic import BaseModel, Field
 app = FastAPI()
 
 
@@ -21,6 +21,11 @@ class PostCreate(BaseModel):
     title: str
     body: str
     author_id: int
+
+
+class UserCreate(BaseModel):
+    username: Annotated[str, Field(..., title="user`s name")]
+    age: Annotated[int, Field(..., title="user`s age")]
 
 
 users = [
@@ -56,23 +61,35 @@ async def add_item(post: PostCreate) -> Post:
 
     return Post(**new_post)
 
+@app.post("/user/add")
+async def user_add(user: UserCreate) -> User:
+    new_user_id = max((user_id['id'] for user_id in users), default=0) + 1
+    new_user = {'id': new_user_id,
+        'username': user.username,
+        'age': user.age }
+
+    posts.append(new_user)
+
+    return User(**new_user)
+
 @app.delete("/items/delete/{id}")
-async def delete_item(id: int) -> Post:
+async def delete_item(id: Annotated[int, Path(..., title="post`s id", ge=1)]) -> Post:
    for index, post in enumerate(posts):
        if post['id'] == id:
            deleted_post = posts.pop(index)
            return Post(**deleted_post)
    raise HTTPException(status_code=404, detail="item not found")
 
-@app.get("/item/{id}")
-async def item(id: int) -> Post:
+@app.get("/items/{id}")
+async def items(id: Annotated[int, Path(title='post`s id', ge=1)]) -> Post:
     for i in posts:
         if i['id'] == id:
             return Post(**i)
     raise HTTPException(status_code=404, detail="post not found")
 
 @app.get("/search")
-async def search(post_id: Optional[int] = None) -> Dict[str, Optional[Post]]:
+async def search(post_id: Annotated[Optional[int], Query(title="id of post to search", ge=1 ,le=50)])\
+        -> Dict[str, Optional[Post]]:
     if post_id:
         for i in posts:
             if i['id'] == post_id:
