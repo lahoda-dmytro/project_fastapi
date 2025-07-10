@@ -25,7 +25,7 @@ class PostCreate(PostBase):
     pass
 
 
-class Post(PostBase):
+class PostResponse(PostBase):
     id: int
     author: User
 

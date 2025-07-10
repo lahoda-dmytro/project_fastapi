@@ -2,11 +2,21 @@ from fastapi import FastAPI, HTTPException, Path, Query
 from typing import Optional, List, Dict, Annotated
 from sqlalchemy.orm import Session
 
+
 from models import base, User, Post
 from database import engine, session_local
+from schemas import UserCreate, PostCreate, PostResponse
 
 app = FastAPI()
 
+base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = session_local()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 users = [
