@@ -25,9 +25,8 @@ class PostCreate(PostBase):
     pass
 
 
-class PostResponse(PostBase):
+class Post(PostBase):
     id: int
-    author: User
 
     class Config:
         orm_mode = True
