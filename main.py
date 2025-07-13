@@ -1,13 +1,21 @@
 from fastapi import FastAPI, HTTPException, Path, Query, Depends
 from typing import Optional, List, Dict, Annotated
 from sqlalchemy.orm import Session
-
+from fastapi.middleware.cors import CORSMiddleware
 
 from models import base, User, Post
 from database import engine, session_local
 from schemas import UserCreate, User as DbUser, PostCreate, Post as DbPost
 
 app = FastAPI()
+
+app.add_middleware(
+      CORSMiddleware,
+      allow_origins=["http://localhost:3000"],
+      allow_credentials=True,
+      allow_methods=["*"],
+      allow_headers=["*"],
+  )
 
 base.metadata.create_all(bind=engine)
 
@@ -18,6 +26,9 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/")
+def read_root():
+    return {"main page"}
 
 @app.post("/users/", response_model=DbUser)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)) -> DbUser:
