@@ -32,7 +32,7 @@ const AddPost = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <h2>create new post</h2>
             <form onSubmit={handleSubmit}>
                 <div>

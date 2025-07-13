@@ -10,7 +10,7 @@ function App() {
         <Router>
             <nav>
                 <Link to="/">main</Link> | <Link to="/posts">posts</Link> | <Link to="/add-post">add post</Link> | <Link
-                to="/add-user">add user</Link>
+                to="/add-user">add author</Link>
             </nav>
             <Routes>
                 <Route path="/" element={<MainPage/>}/>

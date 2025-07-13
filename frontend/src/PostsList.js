@@ -21,11 +21,11 @@ const PostsList = () => {
             });
     }, []);
 
-    if (loading) return <div>loading...</div>;
-    if (error) return <div>error: {error}</div>;
+    if (loading) return <div className="container">loading...</div>;
+    if (error) return <div className="container">error: {error}</div>;
 
     return (
-        <div>
+        <div className="container">
             <h2>list of posts</h2>
             {posts.length === 0 ? (
                 <p>haven`t posts yet</p>

@@ -28,8 +28,8 @@ const AddUser = () => {
     };
 
     return (
-        <div>
-            <h2>create new user</h2>
+        <div className="container">
+            <h2>create author</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>user name: </label>
@@ -39,9 +39,9 @@ const AddUser = () => {
                     <label>age: </label>
                     <input type="number" value={age} onChange={e => setAge(e.target.value)} required/>
                 </div>
-                <button type="submit">create user</button>
+                <button type="submit">create author</button>
             </form>
-            {result && <div>user created: {result.username} (ID: {result.id})</div>}
+            {result && <div>author created: {result.username} (ID: {result.id})</div>}
             {error && <div style={{color: 'red'}}>error: {error}</div>}
         </div>
     );
