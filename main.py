@@ -18,6 +18,9 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/")
+def read_root():
+    return {"main page"}
 
 @app.post("/users/", response_model=DbUser)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)) -> DbUser:
