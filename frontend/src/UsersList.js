@@ -57,12 +57,12 @@ const UsersList = () => {
                         <li key={user.id}
                             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                             <span>{user.username} (age: {user.age}, id: {user.id})</span>
-                            <div>
-                                <Link to={`/users/${user.id}/edit`} style={{marginRight: 10}}>
-                                    <button type="button">edit</button>
+                            <div className="list-btn-group">
+                                <Link to={`/users/${user.id}/edit`}>
+                                    <button type="button" className="list-btn">edit</button>
                                 </Link>
                                 <button onClick={() => handleDelete(user.id)} disabled={deleting === user.id}
-                                        style={{marginLeft: 0}}>
+                                        className="list-btn">
                                     {deleting === user.id ? 'deleting...' : 'delete'}
                                 </button>
                             </div>

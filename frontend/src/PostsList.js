@@ -57,16 +57,16 @@ const PostsList = () => {
                         <li key={post.id}
                             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                             <span>
-                                <Link to={`/posts/${post.id}`}>
+                                <Link to={`/posts/${post.id}`} className="post-link">
                                     <strong>{post.title}</strong>
                                 </Link> — {post.body} (author id: {post.author_id})
                             </span>
-                            <div>
-                                <Link to={`/posts/${post.id}/edit`} style={{marginRight: 10}}>
-                                    <button type="button">edit</button>
+                            <div className="list-btn-group">
+                                <Link to={`/posts/${post.id}/edit`}>
+                                    <button type="button" className="list-btn">edit</button>
                                 </Link>
                                 <button onClick={() => handleDelete(post.id)} disabled={deleting === post.id}
-                                        style={{marginLeft: 0}}>
+                                        className="list-btn">
                                     {deleting === post.id ? 'deleting...' : 'delete'}
                                 </button>
                             </div>
