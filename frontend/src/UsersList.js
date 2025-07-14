@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
-const PostsList = () => {
-    const [posts, setPosts] = useState([]);
+const UsersList = () => {
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [deleting, setDeleting] = useState(null);
 
-    const fetchPosts = () => {
+    const fetchUsers = () => {
         setLoading(true);
-        fetch("http://127.0.0.1:8000/posts/")
+        fetch("http://127.0.0.1:8000/users/")
             .then((res) => {
-                if (!res.ok) throw new Error("failed to get posts");
+                if (!res.ok) throw new Error("failed to get users");
                 return res.json();
             })
             .then((data) => {
-                setPosts(data);
+                setUsers(data);
                 setLoading(false);
             })
             .catch((err) => {
@@ -25,17 +25,17 @@ const PostsList = () => {
     };
 
     useEffect(() => {
-        fetchPosts();
+        fetchUsers();
     }, []);
 
     const handleDelete = async (id) => {
         setDeleting(id);
         try {
-            const res = await fetch(`http://127.0.0.1:8000/posts/${id}`, {
+            const res = await fetch(`http://127.0.0.1:8000/users/${id}`, {
                 method: "DELETE"
             });
-            if (!res.ok) throw new Error("failed to delete post");
-            fetchPosts();
+            if (!res.ok) throw new Error("failed to delete user");
+            fetchUsers();
         } catch (err) {
             setError(err.message);
         } finally {
@@ -48,26 +48,22 @@ const PostsList = () => {
 
     return (
         <div className="container">
-            <h2>list of posts</h2>
-            {posts.length === 0 ? (
-                <p>haven`t posts yet</p>
+            <h2>list of users</h2>
+            {users.length === 0 ? (
+                <p>haven't users yet</p>
             ) : (
                 <ul>
-                    {posts.map((post) => (
-                        <li key={post.id}
+                    {users.map((user) => (
+                        <li key={user.id}
                             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                            <span>
-                                <Link to={`/posts/${post.id}`}>
-                                    <strong>{post.title}</strong>
-                                </Link> — {post.body} (author id: {post.author_id})
-                            </span>
+                            <span>{user.username} (age: {user.age}, id: {user.id})</span>
                             <div>
-                                <Link to={`/posts/${post.id}/edit`} style={{marginRight: 10}}>
+                                <Link to={`/users/${user.id}/edit`} style={{marginRight: 10}}>
                                     <button type="button">edit</button>
                                 </Link>
-                                <button onClick={() => handleDelete(post.id)} disabled={deleting === post.id}
+                                <button onClick={() => handleDelete(user.id)} disabled={deleting === user.id}
                                         style={{marginLeft: 0}}>
-                                    {deleting === post.id ? 'deleting...' : 'delete'}
+                                    {deleting === user.id ? 'deleting...' : 'delete'}
                                 </button>
                             </div>
                         </li>
@@ -78,4 +74,4 @@ const PostsList = () => {
     );
 };
 
-export default PostsList;
+export default UsersList; 

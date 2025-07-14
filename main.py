@@ -58,11 +58,6 @@ async def get_posts(db: Session = Depends(get_db)):
     return db.query(Post).all()
 
 
-@app.get("/users/", response_model=List[DbUser])
-async def get_users(db: Session = Depends(get_db)):
-    return db.query(User).all()
-
-
 @app.delete("/posts/{post_id}", response_model=DbPost)
 async def delete_post(post_id: int, db: Session = Depends(get_db)):
     post = db.query(Post).filter(Post.id == post_id).first()
@@ -72,14 +67,6 @@ async def delete_post(post_id: int, db: Session = Depends(get_db)):
     db.commit()
     return post
 
-@app.delete("/users/{user_id}", response_model=DbUser)
-async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if user is None:
-        raise HTTPException(status_code=404, detail="user not found")
-    db.delete(user)
-    db.commit()
-    return user
 
 @app.put("/posts/{post_id}", response_model=DbPost)
 async def update_post(post_id: int, post: PostCreate, db: Session = Depends(get_db)):
@@ -93,8 +80,39 @@ async def update_post(post_id: int, post: PostCreate, db: Session = Depends(get_
     db.refresh(db_post)
     return db_post
 
+@app.get("/posts/{post_id}", response_model=DbPost)
+async def get_post(post_id: int, db: Session = Depends(get_db)):
+    post = db.query(Post).filter(Post.id == post_id).first()
+    if post is None:
+        raise HTTPException(status_code=404, detail="post not found")
+    return post
 
-@app.put("/users/{post_id}", response_model=DbUser)
+
+
+
+@app.get("/users/", response_model=List[DbUser])
+async def get_users(db: Session = Depends(get_db)):
+    return db.query(User).all()
+
+@app.get("/users/{user_id}", response_model=DbUser)
+async def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="user not found")
+    return user
+
+
+@app.delete("/users/{user_id}", response_model=DbUser)
+async def delete_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="user not found")
+    db.delete(user)
+    db.commit()
+    return user
+
+
+@app.put("/users/{user_id}", response_model=DbUser)
 async def update_user(user_id: int, user: UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.id == user_id).first()
     if db_user is None:
@@ -104,11 +122,3 @@ async def update_user(user_id: int, user: UserCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(db_user)
     return db_user
-
-
-@app.get("/posts/{post_id}", response_model=DbPost)
-async def get_post(post_id: int, db: Session = Depends(get_db)):
-    post = db.query(Post).filter(Post.id == post_id).first()
-    if post is None:
-        raise HTTPException(status_code=404, detail="post not found")
-    return post
