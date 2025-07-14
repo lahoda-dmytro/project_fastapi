@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ad8ee40-d5a3-4891-ae6d-8626daf319ca" name="Changes" comment="implement frontend to backend connection">
+    <list default="true" id="6ad8ee40-d5a3-4891-ae6d-8626daf319ca" name="Changes" comment="implement update, delete, and detail for posts and users components and routes for ui">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/AddPost.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/AddPost.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/AddUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/AddUser.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/MainPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/PostsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/PostsList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/UsersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/UsersList.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +44,16 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/lahoda-dmytro/project_fastapi.git&quot;,
     &quot;accountId&quot;: &quot;e7f07d63-c3a1-4442-8566-c39b420ad004&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;lahoda-dmytro&quot;,
+    &quot;repository&quot;: &quot;project_fastapi&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -143,7 +150,10 @@
       <workItem from="1752425937291" duration="1690000" />
       <workItem from="1752428223900" duration="565000" />
       <workItem from="1752429046710" duration="4706000" />
-      <workItem from="1752436411233" duration="719000" />
+      <workItem from="1752436411233" duration="1105000" />
+      <workItem from="1752444282256" duration="541000" />
+      <workItem from="1752444899245" duration="145000" />
+      <workItem from="1752483028907" duration="4767000" />
     </task>
     <task id="LOCAL-00001" summary="some tests with url addresses">
       <option name="closed" value="true" />
@@ -249,7 +259,31 @@
       <option name="project" value="LOCAL" />
       <updated>1752435521506</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="added some styles to ui">
+      <option name="closed" value="true" />
+      <created>1752437177755</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1752437177755</updated>
+    </task>
+    <task id="LOCAL-00015" summary="implement update, delete, and detail endpoints for posts and users">
+      <option name="closed" value="true" />
+      <created>1752485163500</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1752485163500</updated>
+    </task>
+    <task id="LOCAL-00016" summary="implement update, delete, and detail for posts and users components and routes for ui">
+      <option name="closed" value="true" />
+      <created>1752487550836</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1752487550836</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,7 +325,10 @@
     <MESSAGE value="schemas.py file name fix" />
     <MESSAGE value="added react project" />
     <MESSAGE value="implement frontend to backend connection" />
-    <option name="LAST_COMMIT_MESSAGE" value="implement frontend to backend connection" />
+    <MESSAGE value="added some styles to ui" />
+    <MESSAGE value="implement update, delete, and detail endpoints for posts and users" />
+    <MESSAGE value="implement update, delete, and detail for posts and users components and routes for ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="implement update, delete, and detail for posts and users components and routes for ui" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fastapi_project$fastApiProject.coverage" NAME="fastApiProject Coverage Results" MODIFIED="1752143471592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
