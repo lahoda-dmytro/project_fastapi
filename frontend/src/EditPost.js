@@ -1,15 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
+import {useForm} from "react-hook-form";
 import {useParams, useNavigate} from "react-router-dom";
 
 const EditPost = () => {
     const {postId} = useParams();
     const navigate = useNavigate();
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
-    const [authorId, setAuthorId] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
+    const {register, handleSubmit, reset, setError, formState: {errors, isSubmitSuccessful, isSubmitting}} = useForm();
 
     useEffect(() => {
         fetch(`http://127.0.0.1:8000/posts/${postId}`)
@@ -18,58 +14,54 @@ const EditPost = () => {
                 return res.json();
             })
             .then((data) => {
-                setTitle(data.title);
-                setBody(data.body);
-                setAuthorId(data.author_id);
-                setLoading(false);
+                reset({title: data.title, body: data.body, author_id: data.author_id});
             })
             .catch((err) => {
-                setError(err.message);
-                setLoading(false);
+                setError("root", {type: "manual", message: err.message});
             });
-    }, [postId]);
+    }, [postId, reset, setError]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(null);
-        setSuccess(false);
+    const onSubmit = async (data) => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/posts/${postId}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title, body, author_id: Number(authorId)})
+                body: JSON.stringify({
+                    title: data.title,
+                    body: data.body,
+                    author_id: Number(data.author_id)
+                })
             });
             if (!response.ok) throw new Error("failed to update post");
-            setSuccess(true);
             setTimeout(() => navigate("/posts"), 1000);
         } catch (err) {
-            setError(err.message);
+            setError("root", {type: "manual", message: err.message});
         }
     };
-
-    if (loading) return <div className="container">loading...</div>;
-    if (error) return <div className="container">error: {error}</div>;
 
     return (
         <div className="container">
             <h2>edit post</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label>title: </label>
-                    <input value={title} onChange={e => setTitle(e.target.value)} required/>
+                    <input {...register("title", {required: "input title"})} />
+                    {errors.title && <span style={{color: "red"}}>{errors.title.message}</span>}
                 </div>
                 <div>
                     <label>body: </label>
-                    <textarea value={body} onChange={e => setBody(e.target.value)} required/>
+                    <textarea {...register("body", {required: "input text"})} />
+                    {errors.body && <span style={{color: "red"}}>{errors.body.message}</span>}
                 </div>
                 <div>
                     <label>author id: </label>
-                    <input type="number" value={authorId} onChange={e => setAuthorId(e.target.value)} required/>
+                    <input type="number" {...register("author_id", {required: "input author id"})} />
+                    {errors.author_id && <span style={{color: "red"}}>{errors.author_id.message}</span>}
                 </div>
-                <button type="submit">save</button>
+                <button type="submit" disabled={isSubmitting}>save</button>
+                {isSubmitSuccessful && <div style={{color: 'green'}}>post updated!</div>}
+                {errors.root && <div style={{color: 'red'}}>{errors.root.message}</div>}
             </form>
-            {success && <div style={{color: 'green'}}>post updated!</div>}
-            {error && <div style={{color: 'red'}}>error: {error}</div>}
         </div>
     );
 };

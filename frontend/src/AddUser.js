@@ -1,50 +1,40 @@
-import React, {useState} from "react";
+import React from "react";
+import {useForm} from "react-hook-form";
 
-const AddUser = () => {
-    const [username, setUsername] = useState("");
-    const [age, setAge] = useState("");
-    const [result, setResult] = useState(null);
-    const [error, setError] = useState(null);
+function AddUser() {
+    const {register, handleSubmit, reset, formState: {errors, isSubmitSuccessful}} = useForm();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(null);
-        setResult(null);
+    const onSubmit = async (data) => {
         try {
             const response = await fetch("http://127.0.0.1:8000/users/", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({username, age: Number(age)})
+                body: JSON.stringify(data)
             });
-            if (!response.ok)
-                throw new Error("failed to create user");
-            const data = await response.json();
-            setResult(data);
-            setUsername("");
-            setAge("");
+            if (response.ok) reset();
         } catch (err) {
-            setError(err.message);
         }
     };
 
     return (
         <div className="container">
-            <h2>create author</h2>
-            <form onSubmit={handleSubmit}>
+            <h2>create new user</h2>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label>user name: </label>
-                    <input value={username} onChange={e => setUsername(e.target.value)} required/>
+                    <input {...register("username", {required: "input username"})} />
+                    {errors.username && <span style={{color: "red"}}>{errors.username.message}</span>}
                 </div>
                 <div>
                     <label>age: </label>
-                    <input type="number" value={age} onChange={e => setAge(e.target.value)} required/>
+                    <input type="number" {...register("age", {required: "input age"})} />
+                    {errors.age && <span style={{color: "red"}}>{errors.age.message}</span>}
                 </div>
-                <button type="submit">create author</button>
+                <button type="submit">create user</button>
+                {isSubmitSuccessful && <div style={{color: 'green'}}>user created!</div>}
             </form>
-            {result && <div>author created: {result.username} (ID: {result.id})</div>}
-            {error && <div style={{color: 'red'}}>error: {error}</div>}
         </div>
     );
-};
+}
 
 export default AddUser;

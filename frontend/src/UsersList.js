@@ -1,32 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
+import {useFetch} from "./useFetch";
 
 const UsersList = () => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [deleting, setDeleting] = useState(null);
+    const {data: users, loading, error} = useFetch("http://127.0.0.1:8000/users/");
+    const [deleting, setDeleting] = React.useState(null);
+    const [localError, setLocalError] = React.useState(null);
 
     const fetchUsers = () => {
-        setLoading(true);
-        fetch("http://127.0.0.1:8000/users/")
-            .then((res) => {
-                if (!res.ok) throw new Error("failed to get users");
-                return res.json();
-            })
-            .then((data) => {
-                setUsers(data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                setError(err.message);
-                setLoading(false);
-            });
+        window.location.reload();
     };
-
-    useEffect(() => {
-        fetchUsers();
-    }, []);
 
     const handleDelete = async (id) => {
         setDeleting(id);
@@ -37,19 +20,19 @@ const UsersList = () => {
             if (!res.ok) throw new Error("failed to delete user");
             fetchUsers();
         } catch (err) {
-            setError(err.message);
+            setLocalError(err.message);
         } finally {
             setDeleting(null);
         }
     };
 
     if (loading) return <div className="container">loading...</div>;
-    if (error) return <div className="container">error: {error}</div>;
+    if (error || localError) return <div className="container">error: {error || localError}</div>;
 
     return (
         <div className="container">
             <h2>list of users</h2>
-            {users.length === 0 ? (
+            {(!users || users.length === 0) ? (
                 <p>haven't users yet</p>
             ) : (
                 <ul>
