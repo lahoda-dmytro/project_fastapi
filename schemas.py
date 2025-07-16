@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
 
 class UserBase(BaseModel):
     username: str
-    age: int
+    age: int = Field(..., ge=0, le=100)
 
 class UserCreate(UserBase):
     pass

@@ -2,7 +2,7 @@ import React from "react";
 import {useForm} from "react-hook-form";
 
 function AddUser() {
-    const {register, handleSubmit, reset, formState: {errors, isSubmitSuccessful}} = useForm();
+    const {register, handleSubmit, reset, formState: {errors, isSubmitSuccessful}, setError} = useForm();
 
     const onSubmit = async (data) => {
         try {
@@ -11,8 +11,14 @@ function AddUser() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data)
             });
-            if (response.ok) reset();
+            if (!response.ok) {
+                const errorData = await response.json();
+                setError("age", {type: "manual", message: errorData.detail ? JSON.stringify(errorData.detail): "creating user error"});
+                return;
+            }
+            reset();
         } catch (err) {
+            setError("age", {type: "manual", message: err.message});
         }
     };
 
