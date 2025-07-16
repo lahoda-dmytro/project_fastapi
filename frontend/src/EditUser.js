@@ -28,7 +28,17 @@ const EditUser = () => {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data)
             });
-            if (!response.ok) throw new Error("failed to update user");
+            if (!response.ok) {
+                const errorData = await response.json();
+                let msg = "";
+                if (Array.isArray(errorData.detail)) {
+                    msg = errorData.detail.map(e => e.msg).join("; ");
+                } else {
+                    msg = errorData.detail || "update error";
+                }
+                setError("root", {type: "manual", message: msg});
+                return;
+            }
             setTimeout(() => navigate("/users"), 1000);
         } catch (err) {
             setError("root", {type: "manual", message: err.message});

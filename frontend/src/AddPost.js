@@ -2,7 +2,7 @@ import React from "react";
 import {useForm} from "react-hook-form";
 
 function AddPost() {
-    const {register, handleSubmit, reset, formState: {errors, isSubmitSuccessful}} = useForm();
+    const {setError, register, handleSubmit, reset, formState: {errors, isSubmitSuccessful}} = useForm();
 
     const onSubmit = async (data) => {
         try {
@@ -15,8 +15,20 @@ function AddPost() {
                     author_id: Number(data.author_id)
                 })
             });
-            if (response.ok) reset();
+            if (!response.ok) {
+                const errorData = await response.json();
+                let msg = "";
+                if (Array.isArray(errorData.detail)) {
+                    msg = errorData.detail.map(e => e.msg).join("; ");
+                } else {
+                    msg = errorData.detail || "creating post error";
+                }
+                setError("author_id", {type: "manual", message: msg});
+                return;
+            }
+            reset();
         } catch (err) {
+            setError("author_id", {type: "manual", message: err.message});
         }
     };
 

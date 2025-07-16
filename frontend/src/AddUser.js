@@ -13,7 +13,13 @@ function AddUser() {
             });
             if (!response.ok) {
                 const errorData = await response.json();
-                setError("age", {type: "manual", message: errorData.detail ? JSON.stringify(errorData.detail): "creating user error"});
+                let msg = "";
+                if (Array.isArray(errorData.detail)) {
+                    msg = errorData.detail.map(e => e.msg).join("; ");
+                } else {
+                    msg = errorData.detail || "creating user error";
+                }
+                setError("age", {type: "manual", message: msg});
                 return;
             }
             reset();
