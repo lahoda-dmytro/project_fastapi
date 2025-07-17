@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 
 
 class UserBase(BaseModel):
@@ -6,12 +7,21 @@ class UserBase(BaseModel):
     age: int = Field(..., ge=0, le=100)
 
 class UserCreate(UserBase):
-    pass
+    roles: List[int] = []
 
+
+
+class RoleBase(BaseModel):
+    name: str
+
+class Role(RoleBase):
+    id: int
+    class Config:
+        from_attributes = True
 
 class User(UserBase):
     id: int
-
+    roles: List[Role] = []
     class Config:
         from_attributes = True
 

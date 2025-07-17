@@ -1,12 +1,11 @@
-from fastapi import FastAPI, HTTPException, Path, Query, Depends
-from typing import Optional, List, Dict, Annotated
+from fastapi import FastAPI, HTTPException, Depends
+from typing import  List
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
-from models import base, User, Post
+from models import base, User, Post, Role
 from database import engine, session_local
-from schemas import UserCreate, User as DbUser, PostCreate, Post as DbPost
-
+from schemas import UserCreate, User as DbUser, PostCreate, Post as DbPost, Role as RoleSchema, RoleBase
 app = FastAPI()
 
 app.add_middleware(
@@ -30,13 +29,26 @@ def get_db():
 def read_root():
     return {"main page"}
 
+@app.post("/roles/", response_model=RoleSchema)
+def create_role(role: RoleBase, db: Session = Depends(get_db)):
+    db_role = Role(name=role.name)
+    db.add(db_role)
+    db.commit()
+    db.refresh(db_role)
+    return db_role
+
+@app.get("/roles/", response_model=List[RoleSchema])
+def get_roles(db: Session = Depends(get_db)):
+    return db.query(Role).all()
+
 @app.post("/users/", response_model=DbUser)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)) -> DbUser:
-    db_user = User(username=user.username, age= user.age)
+    db_user = User(username=user.username, age=user.age)   #hashed_password="test"hashed_password="test"hashed_password="test"
+    if user.roles:
+        db_user.roles = db.query(Role).filter(Role.id.in_(user.roles)).all()
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-
     return db_user
 
 @app.post("/posts/", response_model=DbPost)
@@ -88,8 +100,6 @@ async def get_post(post_id: int, db: Session = Depends(get_db)):
     return post
 
 
-
-
 @app.get("/users/", response_model=List[DbUser])
 async def get_users(db: Session = Depends(get_db)):
     return db.query(User).all()
@@ -119,6 +129,10 @@ async def update_user(user_id: int, user: UserCreate, db: Session = Depends(get_
         raise HTTPException(status_code=404, detail="user not found")
     db_user.username = user.username
     db_user.age = user.age
+    if user.roles:
+        db_user.roles = db.query(Role).filter(Role.id.in_(user.roles)).all()
+    else:
+        db_user.roles = []
     db.commit()
     db.refresh(db_user)
     return db_user
