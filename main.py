@@ -117,6 +117,7 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise HTTPException(status_code=404, detail="user not found")
+    db.query(Post).filter(Post.author_id == user.id).delete()
     db.delete(user)
     db.commit()
     return user
