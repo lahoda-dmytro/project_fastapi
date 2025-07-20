@@ -7,13 +7,9 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from typing import List
 from sqlalchemy import delete
+from database import get_db
 
 router = APIRouter(prefix="/users", tags=["users"])
-
-
-async def get_db():
-    async with async_session() as session:
-        yield session
 
 
 @router.post("/", response_model=DbUser)

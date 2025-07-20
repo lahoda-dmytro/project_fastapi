@@ -5,13 +5,9 @@ from database import async_session
 from schemas import Role as RoleSchema, RoleBase
 from sqlalchemy.future import select
 from typing import List
+from database import get_db
 
 router = APIRouter(prefix="/roles", tags=["roles"])
-
-
-async def get_db():
-    async with async_session() as session:
-        yield session
 
 
 @router.post("/", response_model=RoleSchema)

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import users, posts, roles
+from routers import users_router, posts_router, roles_router
 
 app = FastAPI()
 
@@ -12,10 +12,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-app.include_router(users.router)
-app.include_router(posts.router)
-app.include_router(roles.router)
+app.include_router(users_router)
+app.include_router(posts_router)
+app.include_router(roles_router)
 
 
 @app.get("/")

@@ -5,13 +5,9 @@ from database import async_session
 from schemas import PostCreate, Post as DbPost
 from sqlalchemy.future import select
 from typing import List
+from database import get_db
 
 router = APIRouter(prefix="/posts", tags=["posts"])
-
-
-async def get_db():
-    async with async_session() as session:
-        yield session
 
 
 @router.post("/", response_model=DbPost)
