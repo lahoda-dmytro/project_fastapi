@@ -14,7 +14,7 @@ async def get_db():
         yield session
 
 
-@router.post("/roles/", response_model=RoleSchema)
+@router.post("/", response_model=RoleSchema)
 async def create_role(role: RoleBase, db: AsyncSession = Depends(get_db)):
     db_role = Role(name=role.name)
     db.add(db_role)
@@ -23,7 +23,7 @@ async def create_role(role: RoleBase, db: AsyncSession = Depends(get_db)):
     return db_role
 
 
-@router.get("/roles/", response_model=List[RoleSchema])
+@router.get("/", response_model=List[RoleSchema])
 async def get_roles(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Role))
     return result.scalars().all()

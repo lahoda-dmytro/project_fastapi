@@ -14,7 +14,7 @@ async def get_db():
         yield session
 
 
-@router.post("/posts/", response_model=DbPost)
+@router.post("/", response_model=DbPost)
 async def create_post(post: PostCreate, db: AsyncSession = Depends(get_db)) -> DbPost:
     result = await db.execute(select(User).where(User.id == post.author_id))
     db_user = result.scalar_one_or_none()
@@ -27,13 +27,13 @@ async def create_post(post: PostCreate, db: AsyncSession = Depends(get_db)) -> D
     return db_post
 
 
-@router.get("/posts/", response_model=List[DbPost])
+@router.get("/", response_model=List[DbPost])
 async def get_posts(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Post))
     return result.scalars().all()
 
 
-@router.get("/posts/{post_id}", response_model=DbPost)
+@router.get("/{post_id}", response_model=DbPost)
 async def get_post(post_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Post).where(Post.id == post_id))
     post = result.scalar_one_or_none()
@@ -42,7 +42,7 @@ async def get_post(post_id: int, db: AsyncSession = Depends(get_db)):
     return post
 
 
-@router.delete("/posts/{post_id}", response_model=DbPost)
+@router.delete("/{post_id}", response_model=DbPost)
 async def delete_post(post_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Post).where(Post.id == post_id))
     post = result.scalar_one_or_none()
@@ -53,7 +53,7 @@ async def delete_post(post_id: int, db: AsyncSession = Depends(get_db)):
     return post
 
 
-@router.put("/posts/{post_id}", response_model=DbPost)
+@router.put("/{post_id}", response_model=DbPost)
 async def update_post(post_id: int, post: PostCreate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Post).where(Post.id == post_id))
     db_post = result.scalar_one_or_none()

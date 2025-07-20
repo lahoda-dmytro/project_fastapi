@@ -16,7 +16,7 @@ async def get_db():
         yield session
 
 
-@router.post("/users/", response_model=DbUser)
+@router.post("/", response_model=DbUser)
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)) -> DbUser:
     db_user = User(username=user.username, age=user.age)
     if user.roles:
@@ -32,7 +32,7 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)) -> D
     return db_user
 
 
-@router.get("/users/", response_model=List[DbUser])
+@router.get("/", response_model=List[DbUser])
 async def get_users(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(User).options(selectinload(User.roles))
@@ -40,7 +40,7 @@ async def get_users(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 
 
-@router.get("/users/{user_id}", response_model=DbUser)
+@router.get("/{user_id}", response_model=DbUser)
 async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(User).options(selectinload(User.roles)).where(User.id == user_id)
@@ -51,7 +51,7 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     return user
 
 
-@router.delete("/users/{user_id}", response_model=DbUser)
+@router.delete("/{user_id}", response_model=DbUser)
 async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(User).options(selectinload(User.roles)).where(User.id == user_id)
@@ -65,7 +65,7 @@ async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
     return user
 
 
-@router.put("/users/{user_id}", response_model=DbUser)
+@router.put("/{user_id}", response_model=DbUser)
 async def update_user(user_id: int, user: UserCreate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(User).options(selectinload(User.roles)).where(User.id == user_id)
