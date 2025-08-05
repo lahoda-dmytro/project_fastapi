@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from models import User, Post
-from database import async_session
 from schemas import PostCreate, Post as DbPost
 from sqlalchemy.future import select
 from typing import List

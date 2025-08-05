@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from models import Role
-from database import async_session
 from schemas import Role as RoleSchema, RoleBase
 from sqlalchemy.future import select
 from typing import List
