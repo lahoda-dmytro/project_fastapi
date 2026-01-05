@@ -1,6 +1,6 @@
-# antigravity api project
+# fastapi project
 
-this project consists of a fastapi backend and a react frontend.
+this is a simple api for managing posts, users and roles with a react dashboard.
 
 ## prerequisites
 
