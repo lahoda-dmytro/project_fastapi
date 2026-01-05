@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from .base import Base
 from .role import user_roles
@@ -10,5 +11,6 @@ class User(Base):
     username = Column(String, index=True)
     age = Column(Integer)
     hashed_password = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     roles = relationship('Role', secondary=user_roles, back_populates='users')
     posts = relationship('Post', back_populates='author')

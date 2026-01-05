@@ -1,0 +1,247 @@
+.app-layout {
+  display: grid;
+  grid-template-columns: 296px 1fr 340px;
+  min-height: 100vh;
+}
+
+/* Sidebar Left */
+.sidebar {
+  background-color: var(--color-canvas-default);
+  padding: 24px 16px;
+  border-right: 1px solid var(--color-border-default);
+}
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 0 8px;
+  color: var(--color-fg-default);
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--color-fg-default);
+  text-decoration: none;
+  font-size: 14px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background-color: #161b22;
+}
+
+.nav-item.active {
+  font-weight: 600;
+  background-color: #161b22;
+}
+
+.nav-icon {
+  color: var(--color-fg-muted);
+}
+
+/* Main Content */
+.main-content {
+  padding: 24px 40px;
+  background-color: var(--color-canvas-default);
+}
+
+.ask-box {
+  background-color: #0d1117;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 24px;
+  color: var(--color-fg-muted);
+  font-size: 16px;
+  cursor: text;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-muted);
+  padding-bottom: 8px;
+}
+
+.content-header h1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Feed List (Like Repository Items) */
+.feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-border-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-accent-fg);
+  cursor: pointer;
+}
+
+.card-title:hover {
+  text-decoration: underline;
+}
+
+.card-body {
+  font-size: 14px;
+  color: var(--color-fg-muted);
+  margin: 4px 0;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  margin-top: 8px;
+}
+
+.lang-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Minimalist Star Button */
+.star-btn {
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  padding: 3px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Activity Sidebar (Changelog Timeline) */
+.activity-sidebar {
+  padding: 24px 16px;
+  border-left: 1px solid var(--color-border-default);
+  background-color: var(--color-canvas-default);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-border-default);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -23.5px;
+  top: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #30363d;
+  border: 2px solid #010409;
+}
+
+.timeline-date {
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  margin-bottom: 4px;
+}
+
+.timeline-text {
+  font-size: 13px;
+  color: var(--color-fg-default);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #161b22;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.delete-btn-minimal {
+  color: var(--color-fg-muted);
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.delete-btn-minimal:hover {
+  color: #f85149;
+  background: none;
+}

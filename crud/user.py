@@ -4,9 +4,13 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy import delete
 from models import User, Role, Post
 from schemas import UserCreate
-from passlib.context import CryptContext
+import bcrypt
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 async def get_user(db: AsyncSession, user_id: int):
     result = await db.execute(
@@ -19,7 +23,7 @@ async def get_users(db: AsyncSession):
     return result.scalars().all()
 
 async def create_user(db: AsyncSession, user: UserCreate):
-    hashed_password = pwd_context.hash(user.password)
+    hashed_password = hash_password(user.password)
     db_user = User(username=user.username, age=user.age, hashed_password=hashed_password)
     if user.roles:
         result = await db.execute(select(Role).where(Role.id.in_(user.roles)))
@@ -46,7 +50,7 @@ async def update_user(db: AsyncSession, user_id: int, user_update: UserCreate):
         # Update password if needed, though usually update endpoint might separate this
         # For now, following existing pattern of updating all fields from input
         if user_update.password:
-             db_user.hashed_password = pwd_context.hash(user_update.password)
+             db_user.hashed_password = hash_password(user_update.password)
         
         if user_update.roles:
             result = await db.execute(select(Role).where(Role.id.in_(user_update.roles)))

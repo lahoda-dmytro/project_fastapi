@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -9,4 +10,5 @@ class Post(Base):
     title = Column(String, index=True)
     body = Column(String)
     author_id = Column(Integer, ForeignKey('users.id'))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     author = relationship("User", back_populates="posts")

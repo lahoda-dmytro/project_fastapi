@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from datetime import datetime
 from .role import Role
 
 
@@ -39,6 +40,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     roles: list[Role]
+    created_at: datetime
 
     class Config:
         from_attributes = True
