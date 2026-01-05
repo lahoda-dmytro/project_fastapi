@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { userService, postService, roleService } from './services/api';
-import { Plus, Users, Layout, FileText, Trash2, Github, Star, ChevronDown } from 'lucide-react';
+import { Plus, Users, Layout, FileText, Trash2, Github, Star, ChevronDown, Search, Bell, Settings } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -82,112 +82,138 @@ function App() {
   };
 
   return (
-    <div className="app-layout">
-      {/* Sidebar Left */}
-      <aside className="sidebar">
-        <div className="sidebar-title">Top repositories</div>
-        <nav className="nav-list">
-          <button className={`nav-item ${activeTab === 'posts' ? 'active' : ''}`} onClick={() => setActiveTab('posts')}>
-            <FileText size={16} className="nav-icon" /> lahoda-dmytro/posts
-          </button>
-          <button className={`nav-item ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>
-            <Users size={16} className="nav-icon" /> lahoda-dmytro/users
-          </button>
-          <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => setActiveTab('roles')}>
-            <Layout size={16} className="nav-icon" /> lahoda-dmytro/roles
-          </button>
-        </nav>
-      </aside>
+    <div className="app-container">
+      <header className="gh-header">
+        <div className="gh-header-left">
+          <button className="header-icon-btn" style={{ border: 'none' }}><Layout size={20} /></button>
+          <Github size={32} />
+          <span style={{ fontWeight: 600 }}>Dashboard</span>
+        </div>
 
-      {/* Main Content */}
-      <main className="main-content">
-        <header className="content-header">
-          <h1>{activeTab === 'posts' ? 'Feed' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h1>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button className="primary" onClick={() => {
-              if (activeTab === 'posts') setShowPostModal(true);
-              else if (activeTab === 'users') setShowUserModal(true);
-              else setShowRoleModal(true);
-            }}>
-              <Plus size={16} /> New {activeTab.slice(0, -1)}
-            </button>
+        <div className="gh-header-right">
+          <div className="header-search">
+            <span>Type <kbd style={{ border: '1px solid #30363d', padding: '0 4px', borderRadius: '3px' }}> / </kbd> to search</span>
           </div>
-        </header>
+          <div style={{ display: 'flex', gap: '4px', marginLeft: '8px', borderLeft: '1px solid #30363d', paddingLeft: '8px' }}>
+            <button className="header-icon-btn"><Plus size={16} /><ChevronDown size={14} /></button>
+            <button className="header-icon-btn"><Search size={16} /></button>
+            <button className="header-icon-btn"><Bell size={16} /></button>
+            <button className="header-icon-btn"><Settings size={16} /></button>
+            <img src="https://avatars.githubusercontent.com/u/147078692?v=4" className="avatar-circle" alt="avatar" style={{ marginLeft: '8px' }} />
+          </div>
+        </div>
+      </header>
 
-        {loading ? (
-          <div style={{ color: 'var(--color-fg-muted)' }}>Loading activity...</div>
-        ) : (
-          <div className="feed">
-            {activeTab === 'posts' && posts.map(post => {
-              const colors = ['#f1e05a', '#563d7c', '#e34c26', '#3572A5'];
-              const color = colors[post.id % colors.length];
-              return (
-                <div key={post.id} className="card">
-                  <div className="card-header">
-                    <div className="card-title">lahoda-dmytro/{post.title.toLowerCase().replace(/\s+/g, '_')}</div>
-                    <div style={{ display: 'flex', gap: '4px' }}>
-                      <button className="star-btn"><Star size={14} /> Star <ChevronDown size={14} /></button>
-                      <button onClick={() => handleDeletePost(post.id)} className="delete-btn-minimal"><Trash2 size={14} /></button>
+      <div className="app-layout">
+        {/* Sidebar Left */}
+        <aside className="sidebar">
+          <div className="sidebar-title">Top repositories</div>
+          <div style={{ padding: '0 8px 12px 8px' }}>
+            <input placeholder="Find a repository..." style={{ width: '100%', fontSize: '12px' }} />
+          </div>
+          <nav className="nav-list">
+            <button className={`nav-item ${activeTab === 'posts' ? 'active' : ''}`} onClick={() => setActiveTab('posts')}>
+              <FileText size={16} className="nav-icon" /> lahoda-dmytro/posts
+            </button>
+            <button className={`nav-item ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>
+              <Users size={16} className="nav-icon" /> lahoda-dmytro/users
+            </button>
+            <button className={`nav-item ${activeTab === 'roles' ? 'active' : ''}`} onClick={() => setActiveTab('roles')}>
+              <Layout size={16} className="nav-icon" /> lahoda-dmytro/roles
+            </button>
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="main-content">
+          <header className="content-header">
+            <h1 style={{ fontSize: '20px', fontWeight: 400 }}>Home</h1>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button className="primary" onClick={() => {
+                if (activeTab === 'posts') setShowPostModal(true);
+                else if (activeTab === 'users') setShowUserModal(true);
+                else setShowRoleModal(true);
+              }}>
+                <Plus size={16} /> New {activeTab.slice(0, -1)}
+              </button>
+            </div>
+          </header>
+
+          {loading ? (
+            <div style={{ color: 'var(--color-fg-muted)' }}>Loading activity...</div>
+          ) : (
+            <div className="feed">
+              {activeTab === 'posts' && posts.map(post => {
+                const colors = ['#f1e05a', '#563d7c', '#e34c26', '#3572A5'];
+                const color = colors[post.id % colors.length];
+                return (
+                  <div key={post.id} className="card">
+                    <div className="card-header">
+                      <div className="card-title">lahoda-dmytro/{post.title.toLowerCase().replace(/\s+/g, '_')}</div>
+                      <div style={{ display: 'flex', gap: '4px' }}>
+                        <button className="star-btn"><Star size={14} /> Star <ChevronDown size={14} /></button>
+                        <button onClick={() => handleDeletePost(post.id)} className="delete-btn-minimal"><Trash2 size={14} /></button>
+                      </div>
+                    </div>
+                    <div className="card-body">{post.body}</div>
+                    <div className="card-footer">
+                      <span className="lang-dot" style={{ backgroundColor: color }}></span>
+                      <span>Author: {users.find(u => u.id === post.author_id)?.username || `user_${post.author_id}`}</span>
+                      <span>•</span>
+                      <span>{formatTimeAgo(new Date(post.created_at))}</span>
                     </div>
                   </div>
-                  <div className="card-body">{post.body}</div>
+                );
+              })}
+
+              {activeTab === 'users' && users.map(user => (
+                <div key={user.id} className="card">
+                  <div className="card-header">
+                    <div className="card-title">{user.username}</div>
+                    <button onClick={() => handleDeleteUser(user.id)} className="delete-btn-minimal"><Trash2 size={14} /></button>
+                  </div>
+                  <div className="card-body">Member of this space since {new Date(user.created_at).toLocaleDateString()}.</div>
                   <div className="card-footer">
-                    <span className="lang-dot" style={{ backgroundColor: color }}></span>
-                    <span>Author: {users.find(u => u.id === post.author_id)?.username || `user_${post.author_id}`}</span>
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      {user.roles.map(role => (
+                        <span key={role.id} style={{ border: '1px solid var(--color-border-default)', padding: '0 10px', borderRadius: '12px', fontSize: '12px' }}>{role.name}</span>
+                      ))}
+                    </div>
                     <span>•</span>
-                    <span>{formatTimeAgo(new Date(post.created_at))}</span>
+                    <span>Age: {user.age}</span>
                   </div>
                 </div>
-              );
-            })}
+              ))}
 
-            {activeTab === 'users' && users.map(user => (
-              <div key={user.id} className="card">
-                <div className="card-header">
-                  <div className="card-title">{user.username}</div>
-                  <button onClick={() => handleDeleteUser(user.id)} className="delete-btn-minimal"><Trash2 size={14} /></button>
-                </div>
-                <div className="card-body">Member of this space since {new Date(user.created_at).toLocaleDateString()}.</div>
-                <div className="card-footer">
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    {user.roles.map(role => (
-                      <span key={role.id} style={{ border: '1px solid var(--color-border-default)', padding: '0 10px', borderRadius: '12px', fontSize: '12px' }}>{role.name}</span>
-                    ))}
+              {activeTab === 'roles' && roles.map(role => (
+                <div key={role.id} className="card">
+                  <div className="card-header">
+                    <div className="card-title">{role.name}</div>
                   </div>
-                  <span>•</span>
-                  <span>Age: {user.age}</span>
+                  <div className="card-body">Permission group with ID: {role.id}</div>
                 </div>
-              </div>
-            ))}
-
-            {activeTab === 'roles' && roles.map(role => (
-              <div key={role.id} className="card">
-                <div className="card-header">
-                  <div className="card-title">{role.name}</div>
-                </div>
-                <div className="card-body">Permission group with ID: {role.id}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </main>
-
-      {/* Activity Sidebar Right */}
-      <aside className="activity-sidebar">
-        <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '16px' }}>Latest from our changelog</div>
-        <div className="timeline">
-          {getActivity().map(item => (
-            <div key={item.id} className="timeline-item">
-              <div className="timeline-dot"></div>
-              <div className="timeline-date">{formatTimeAgo(item.date)}</div>
-              <div className="timeline-text">
-                <strong>{item.user}</strong> {item.text}
-              </div>
+              ))}
             </div>
-          ))}
-          {getActivity().length === 0 && <div className="timeline-text" style={{ color: 'var(--color-fg-muted)' }}>No recent activity found.</div>}
-        </div>
-      </aside>
+          )}
+        </main>
+
+        {/* Activity Sidebar Right */}
+        <aside className="activity-sidebar">
+          <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '16px' }}>Latest from our changelog</div>
+          <div className="timeline">
+            {getActivity().map(item => (
+              <div key={item.id} className="timeline-item">
+                <div className="timeline-dot"></div>
+                <div className="timeline-date">{formatTimeAgo(item.date)}</div>
+                <div className="timeline-text">
+                  <strong>{item.user}</strong> {item.text}
+                </div>
+              </div>
+            ))}
+            {getActivity().length === 0 && <div className="timeline-text" style={{ color: 'var(--color-fg-muted)' }}>No recent activity found.</div>}
+          </div>
+        </aside>
+      </div>
 
       {/* Modals */}
       {showPostModal && <PostModal onClose={() => setShowPostModal(false)} onSuccess={fetchData} users={users} />}
@@ -197,7 +223,6 @@ function App() {
   );
 }
 
-// Reuse Modals from previous version but update styles slightly to match
 function PostModal({ onClose, onSuccess, users }) {
   const [formData, setFormData] = useState({ title: '', body: '', author_id: users[0]?.id || '' });
   const handleSubmit = async (e) => {
