@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -31,7 +31,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=["*"], # allow all for simplicity in this project
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,17 +44,17 @@ app.include_router(roles_router)
 
 # serve static files from the react app
 if os.path.exists("frontend/dist"):
+    # mount assets separately for performance
     app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="static")
 
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        # check if requested path is an api route
-        if full_path.startswith("api/") or full_path.startswith("users") or full_path.startswith("posts") or full_path.startswith("roles"):
-            return None # let fastapi handle it normally
+        # excluded paths (already handled by routers)
+        if full_path.split('/')[0] in ["users", "posts", "roles", "docs", "openapi.json"]:
+            raise HTTPException(status_code=404)
         
-        # serve index.html for all other routes to support react router
         return FileResponse("frontend/dist/index.html")
 else:
     @app.get("/")
     def read_root():
-        return {"status": "api is running, but frontend is not built"}
+        return {"status": "api is running, but frontend is not built. please run 'npm run build' in the frontend directory."}
