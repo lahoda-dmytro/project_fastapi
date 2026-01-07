@@ -5,9 +5,6 @@ from fastapi.responses import FileResponse
 import os
 from routers import users_router, posts_router, roles_router
 
-from contextlib import asynccontextmanager
-from database import engine
-from models import Base
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
